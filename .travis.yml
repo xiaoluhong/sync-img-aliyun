@@ -6,7 +6,8 @@ before_script:
   - git config --global user.name "xiaoluhong"
   - git config --global user.email "xiaoluhong@rancher.com"
   - git config --global push.default simple
-
+script:
+  - bash scripts/sync-img.sh
 services:
   - docker
 before_install:
@@ -14,4 +15,3 @@ before_install:
   - sudo pip install shyaml
   - sudo apt-get install jq
   - chmod +x scripts/sync-img.sh
-  - scripts/sync-img.sh
