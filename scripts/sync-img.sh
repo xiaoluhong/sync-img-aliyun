@@ -158,5 +158,5 @@ sync_images_with_arch ()
 sync_images_with_arch ${images_list} ${images_arch} ${images_namespace}
 
 docker pull rancherlabs/website:build
-docker tag rancherlabs/website:build ${aliyun_registry}/rancher_cn/website:build
-docker push registry.cn-shanghai.aliyuncs.com/rancher_cn/website:build
+docker tag rancherlabs/website:build registry.cn-shanghai.aliyuncs.com/rancher/website:build
+docker push registry.cn-shanghai.aliyuncs.com/rancher/website:build
