@@ -151,12 +151,13 @@ sync_images_with_arch ()
     return 0
 }
 
+docker pull rancherlabs/website:build
+docker tag rancherlabs/website:build registry.cn-shanghai.aliyuncs.com/rancher/website:build
+docker push registry.cn-shanghai.aliyuncs.com/rancher/website:build
+
 #main process
 #jq_install_check
 #docker_install_check
 #docker_login_check
 sync_images_with_arch ${images_list} ${images_arch} ${images_namespace}
 
-docker pull rancherlabs/website:build
-docker tag rancherlabs/website:build registry.cn-shanghai.aliyuncs.com/rancher/website:build
-docker push registry.cn-shanghai.aliyuncs.com/rancher/website:build
