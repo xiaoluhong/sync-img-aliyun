@@ -6,9 +6,12 @@ images_list="kubernetes-dashboard,k8s-dns-sidecar,k8s-dns-kube-dns,k8s-dns-dnsma
 rancher_list="master"
 images_arch=amd64
 images_namespace=rancher
-aliyun_registry=registry.cn-shanghai.aliyuncs.com
+aliyun_registry1=registry.cn-shanghai.aliyuncs.com
+aliyun_registry2=registry.cn-shenzhen.aliyuncs.com
 
-docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyun_registry}
+
+docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyun_registry1}
+docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyun_registry2}
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} 
 
