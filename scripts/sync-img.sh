@@ -152,8 +152,8 @@ sync_images_with_arch ()
 }
 
 docker pull rancherlabs/website:build
-docker tag rancherlabs/website:build registry.cn-shanghai.aliyuncs.com/rancher/website:build
-docker push registry.cn-shanghai.aliyuncs.com/rancher/website:build
+docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
 
 #main process
 #jq_install_check
