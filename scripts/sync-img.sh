@@ -6,6 +6,9 @@ images_list="kubernetes-dashboard,k8s-dns-sidecar,k8s-dns-kube-dns,k8s-dns-dnsma
 rancher_list="master"
 images_arch=amd64
 images_namespace=rancher
+
+aliyun_registry=registry.cn-shanghai.aliyuncs.com
+
 aliyun_registry1=registry.cn-shanghai.aliyuncs.com
 aliyun_registry2=registry.cn-shenzhen.aliyuncs.com
 
