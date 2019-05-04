@@ -18,9 +18,6 @@ docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyu
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} 
 
-#Input params: messages
-#Output params: None
-#Function: Present the processing log and write to log file.
 logger()
 {
     log=$1
@@ -28,57 +25,6 @@ logger()
     echo ${cur_time} ${log} | tee -a ${log_file}
 }
 
-#check Docker install
-docker_install_check ()
-{
-    logger "check Docker install"
-    docker -v
-    if [ $? -eq 0 ]; then
-        logger "Docker has been installed."
-        return 0
-    else
-        logger "Please install Docker."
-        exit -1
-    fi
-
-}
-
-#Input params: None
-#Output params: None
-#Function: Install jq tools regarding to different linux releases.
-jq_install_check ()
-{
-    logger "check jq install"
-    jq --version
-    if [ $? -eq 0 ]; then
-        logger "JQ has been installed."
-        return 0
-    else
-        logger "Please install JQ."
-        exit -1
-    fi
-}
-
-#Input params: None
-#Output params: None
-#Function: Loop to load and verify user's registry information.
-docker_login_check ()
-{
-    docker_info=$(docker info |grep Username |wc -l)
-    if  [ ${docker_info} -eq 1 ]; then
-        #echo  "Check that you have logged in to docker hub"
-        logger "Check that you have logged in to docker hub"
-        return 0
-    else
-        #echo "You didn't log in to docker hub. Please login"
-        logger "You didn't log in to docker hub. Please login"
-        exit
-    fi
-}
-
-#Input params: kube namespace, image information, rancher namespace
-#Output params: None
-#Function: Pull and retag the image from google's offical registry, then push it to customized registry.
 docker_push ()
 {
     gcr_namespace=$1
@@ -98,9 +44,6 @@ docker_push ()
     fi
 }
 
-#Input params: images list, arch type, namespace
-#Output params: None
-#Function: Loop to list/compare images and invoke docker_push to update images.
 sync_images_with_arch ()
 {
     img_list=$1
