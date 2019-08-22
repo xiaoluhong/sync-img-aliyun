@@ -109,4 +109,3 @@ docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
 #docker_install_check
 #docker_login_check
 sync_images_with_arch ${images_list} ${images_arch} ${images_namespace}
-
