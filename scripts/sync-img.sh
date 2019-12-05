@@ -2,7 +2,7 @@
 
 workdir=`pwd`
 log_file=${workdir}/sync_images_$(date +"%Y-%m-%d").log
-images_list="kubernetes-dashboard,k8s-dns-sidecar,pause,tiller"
+images_list="tiller,pause,kubernetes-dashboard,k8s-dns-sidecar"
 rancher_list="master"
 images_arch=amd64
 images_namespace=rancher
