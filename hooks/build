@@ -1,5 +1,6 @@
 #!/bin/bash -x
 
+NS=rancher
 #RANCHER_VERSION="v2.2.2 v2.2.1 v2.2.0 v2.1.8 v2.1.7 v2.1.6 v2.1.5 v2.1.4"
 
 RANCHER_VERSION=" v2.3.5"
@@ -15,7 +16,7 @@ do
 done
 
 echo ===============================================
-    curl -LS -o /usr/bin/rke https://github.com/rancher/rke/releases/download/$(curl -s https://api.github.com/repos/rancher/rke/releases/latest | grep tag_name | cut -d '"' -f 4)/rke_linux-amd64
+    curl -LS -o /usr/bin/rke https://github.com/rancher/rke/releases/download/$(curl -s https://api.github.com/repos/rancher/rke/releases/latest | grep tag_name | cut -d '"' -f 4)/rke_linux-amd64 
     chmod +x /usr/bin/rke
     rke config --system-images --all >> ./rancher-images-all.txt
     sort -u rancher-images-all.txt -o rancher-images-all.txt
@@ -30,7 +31,6 @@ echo ===============================================
 docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${REGISTRY}
 
 IMAGES=$( cat ./rancher-images-all.txt )
-NS=rancher
 
 for IMGS in $( echo "${IMAGES}" );
 do
