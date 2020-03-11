@@ -16,7 +16,7 @@ aliyun_registry2=registry.cn-shenzhen.aliyuncs.com
 docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyun_registry1}
 docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyun_registry2}
 
-docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} 
+docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 
 logger()
 {
@@ -30,7 +30,7 @@ docker_push ()
     gcr_namespace=$1
     img_tag=$2
     rancher_namespace=$3
-    
+
     docker pull gcr.io/${gcr_namespace}/${img_tag}
     docker tag gcr.io/${gcr_namespace}/${img_tag} ${aliyun_registry}/${rancher_namespace}/${img_tag}
     docker push ${aliyun_registry}/${rancher_namespace}/${img_tag}
