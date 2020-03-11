@@ -11,7 +11,7 @@ script:
 services:
   - docker
 before_install:
-  - sudo apt-get update
-  - sudo pip install shyaml
-  - sudo apt-get install jq
+ # - sudo apt-get update
+ # - sudo pip install shyaml
+ # - sudo apt-get install jq
   - chmod +x scripts/sync-img.sh

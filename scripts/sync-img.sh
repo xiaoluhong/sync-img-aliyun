@@ -1,41 +1,37 @@
-#!/bin/bash -x
+#!/bin/bash
 
 #RANCHER_VERSION="v2.2.2 v2.2.1 v2.2.0 v2.1.8 v2.1.7 v2.1.6 v2.1.5 v2.1.4"
 
-RANCHER_VERSION=" v2.3.5"
+RANCHER_VERSION="v2.3.5"
 
 ALI_DOCKER_USERNAME=$ALI_DOCKER_USERNAME
 ALI_DOCKER_PASSWORD=$ALI_DOCKER_PASSWORD
 
 REGISTRY=registry.cn-hangzhou.aliyuncs.com
 
-for RANCHER in $( echo ${RANCHER_VERSION} );
+docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${REGISTRY}
+
+for RANCHER in $( echo "${RANCHER_VERSION}" );
 do
     curl -L https://github.com/rancher/rancher/releases/download/${RANCHER}/rancher-images.txt >> rancher-images-all.txt
 done
 
 echo ===============================================
-    curl -LS -o /usr/bin/rke https://github.com/rancher/rke/releases/download/$(curl -s https://api.github.com/repos/rancher/rke/releases/latest | grep tag_name | cut -d '"' -f 4)/rke_linux-amd64
-    chmod +x /usr/bin/rke
-    rke config --system-images --all >> ./rancher-images-all.txt
+    curl -LS -o ./rke https://github.com/rancher/rke/releases/download/$(curl -s https://api.github.com/repos/rancher/rke/releases/latest | grep tag_name | cut -d '"' -f 4)/rke_linux-amd64
+    chmod +x ./rke
+    ./rke config --system-images --all |grep -v 'time=' >> ./rancher-images-all.txt
     sort -u rancher-images-all.txt -o rancher-images-all.txt
 echo ===============================================
 
-cat rancher-images-all.txt
-
-echo ===============================================
-cat rancher-images-all.txt | wc -l
-echo ===============================================
-
-docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${REGISTRY}
 
 IMAGES=$( cat ./rancher-images-all.txt )
 NS=rancher
 
 for IMGS in $( echo "${IMAGES}" );
 do
+    docker pull ${IMGS}
 
-    n=$( echo ${IMGS} | awk -F"/" '{print NF-1}' )
+    n=$( echo "${IMGS}" | awk -F"/" '{print NF-1}' )
 
         #如果镜像名中没有/，那么此镜像一定是library仓库的镜像；
 
@@ -51,7 +47,7 @@ do
         #如果镜像名中有1个/，那么/左侧为项目名，右侧为镜像名和tag
 
         elif [ ${n} -eq 1 ]; then
-            IMG_TAG=$(echo ${IMGS} | awk -F"/" '{print $2}')
+            IMG_TAG=$(echo "${IMGS}" | awk -F"/" '{print $2}')
 
             #重命名镜像
             docker tag ${IMGS} ${REGISTRY}/${NS}/${IMG_TAG}
@@ -62,10 +58,10 @@ do
         #如果镜像名中有2个/，
 
         elif [ ${n} -eq 2 ]; then
-            IMG_TAG=$(echo ${IMGS} | awk -F"/" '{print $3}')
+            IMG_TAG=$(echo "${IMGS}" | awk -F"/" '{print $3}')
 
             #重命名镜像
-            docker tag ${IMGS} ${REGISTRY}/${NS}/${IMG_TAG}
+            docker tag "${IMGS}" ${REGISTRY}/${NS}/${IMG_TAG}
 
             #上传镜像
             docker push ${REGISTRY}/${NS}/${IMG_TAG}
