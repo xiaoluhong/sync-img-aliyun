@@ -22,9 +22,9 @@ docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 #docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
 #docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
 
-docker pull hongxiaolu/website:file-download
-docker tag hongxiaolu/website:file-download registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
-docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
+#docker pull hongxiaolu/website:file-download
+#docker tag hongxiaolu/website:file-download registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
+#docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
 
 logger()
 {
