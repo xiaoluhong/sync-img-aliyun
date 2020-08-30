@@ -18,6 +18,10 @@ docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyu
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 
+docker pull rancherlabs/website:build
+docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+
 logger()
 {
     log=$1
@@ -99,10 +103,6 @@ sync_images_with_arch ()
 
     return 0
 }
-
-docker pull rancherlabs/website:build
-docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
-docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
 
 #main process
 #jq_install_check
