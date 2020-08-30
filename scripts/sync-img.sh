@@ -18,9 +18,13 @@ docker login --username=${ALI_DOCKER_USERNAME}  -p${ALI_DOCKER_PASSWORD} ${aliyu
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 
-docker pull rancherlabs/website:build
-docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
-docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+#docker pull rancherlabs/website:build
+#docker tag rancherlabs/website:build registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+#docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:build
+
+docker pull hongxiaolu/website:file-download
+docker tag hongxiaolu/website:file-download registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
+docker push registry.cn-shenzhen.aliyuncs.com/rancher/website:file-download
 
 logger()
 {
@@ -57,8 +61,8 @@ sync_images_with_arch ()
     for imgs in $(echo ${img_list} | tr "," "\n");
     do
         if [ "x${imgs}" == "xtiller" ]; then
-            kube_tags=$(curl -k -s -X GET https://gcr.io/v2/kubernetes-helm/${imgs}/tags/list | jq -r '.tags[]'| sort -r | head -n 10 | grep -v rc )
-            rancher_result=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}/tags/ | jq '.["detail"]' | sed 's/\"//g' | awk '{print $2}' | head -n 10 | grep -v rc | grep -v dev )
+            kube_tags=$(curl -k -s -X GET https://gcr.io/v2/kubernetes-helm/${imgs}/tags/list | jq -r '.tags[]'| sort -r | head -n 5 | grep -v rc )
+            rancher_result=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}/tags/ | jq '.["detail"]' | sed 's/\"//g' | awk '{print $2}' | head -n 5 | grep -v rc | grep -v dev )
 
             if [ "x${rancher_result}" == "xnot" ]; then
                 for tags in ${kube_tags}
@@ -66,7 +70,7 @@ sync_images_with_arch ()
                     docker_push "kubernetes-helm" ${imgs}:${tags} ${img_namespace}
                 done
             else
-                rancher_tags=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}/tags/?page_size=1000 | jq '."results"[]["name"]' | sort -r | sed 's/\"//g' | head -n 10 | grep -v rc | grep -v dev )
+                rancher_tags=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}/tags/?page_size=1000 | jq '."results"[]["name"]' | sort -r | sed 's/\"//g' | head -n 5 | grep -v rc | grep -v dev )
                 for tags in ${kube_tags}
                 do
                     if echo "${rancher_tags[@]}" | grep -w "${tags}" &>/dev/null; then
@@ -77,8 +81,8 @@ sync_images_with_arch ()
                 done
             fi
         else
-            kube_tags=$(curl -k -s -X GET https://gcr.io/v2/google_containers/${imgs}-${img_arch}/tags/list | jq -r '.tags[]'|sort -r | head -n 10 | grep -v rc | grep -v dev )
-            rancher_result=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}-${img_arch}/tags/ | jq '.["detail"]' | sed 's/\"//g' | awk '{print $2}' | head -n 10 | grep -v rc | grep -v dev )
+            kube_tags=$(curl -k -s -X GET https://gcr.io/v2/google_containers/${imgs}-${img_arch}/tags/list | jq -r '.tags[]'|sort -r | head -n 5 | grep -v rc | grep -v dev )
+            rancher_result=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}-${img_arch}/tags/ | jq '.["detail"]' | sed 's/\"//g' | awk '{print $2}' | head -n 5 | grep -v rc | grep -v dev )
 
             if [ "x${rancher_result}" == "xnot" ]; then
                 for tags in ${kube_tags}
@@ -86,7 +90,7 @@ sync_images_with_arch ()
                     docker_push "google_containers" ${imgs}-${img_arch}:${tags} ${img_namespace}
                 done
             else
-                rancher_tags=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}-${img_arch}/tags/?page_size=1000 | jq '."results"[]["name"]' | sort -r |sed 's/\"//g' | head -n 10 | grep -v rc | grep -v dev )
+                rancher_tags=$(curl -k -s -X GET https://registry.hub.docker.com/v2/repositories/${img_namespace}/${imgs}-${img_arch}/tags/?page_size=1000 | jq '."results"[]["name"]' | sort -r |sed 's/\"//g' | head -n 5 | grep -v rc | grep -v dev )
                 for tags in ${kube_tags}
                 do
                     if  echo "${rancher_tags[@]}" | grep -w "${tags}" &>/dev/null; then
